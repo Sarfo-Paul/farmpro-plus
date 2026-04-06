@@ -13,7 +13,13 @@ import adminRoutes from './routes/admin';
 const server = Fastify({ logger: true });
 
 async function start() {
-  await server.register(cors, { origin: 'http://localhost:5173', credentials: true });
+  // Configure CORS origins via `CORS_ORIGIN` env var (comma-separated).
+  // If not set, allow all origins (useful for demos). For production set a specific origin.
+  const corsEnv = process.env.CORS_ORIGIN || '';
+  const allowedOrigins = corsEnv.split(',').map((s) => s.trim()).filter(Boolean);
+  const corsOptions: any = { credentials: true };
+  corsOptions.origin = allowedOrigins.length ? allowedOrigins : true;
+  await server.register(cors, corsOptions);
   await server.register(jwt, { secret: process.env.JWT_SECRET || 'dev-secret' });
 
   // Resolve directory for serving a built frontend (if present)
