@@ -1,6 +1,10 @@
 import { storage } from './storage';
 
-const API_BASE = (import.meta.env.VITE_API_URL as string) || 'http://localhost:4000';
+// Use VITE_API_URL when provided (for separate API hosts). Default to
+// an empty string so the client calls relative paths (e.g. `/api/...`) when
+// the frontend and backend are served from the same origin (suitable for Vercel
+// deployments that serve the static site from the same domain as the API).
+const API_BASE = (import.meta.env.VITE_API_URL as string) || '';
 
 async function request(path: string, opts: RequestInit = {}) {
   const headers: Record<string, string> = { 'Content-Type': 'application/json' };

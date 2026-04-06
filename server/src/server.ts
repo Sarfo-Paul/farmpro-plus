@@ -13,7 +13,27 @@ import adminRoutes from './routes/admin';
 const server = Fastify({ logger: true });
 
 async function start() {
-  await server.register(cors, { origin: 'http://localhost:5173', credentials: true });
+  // Configure CORS origins from environment for deployments (Vercel, etc.).
+  // Set `CORS_ORIGINS` to a comma-separated list of allowed origins, or
+  // set `VERCEL_URL` (Vercel provides this in the environment) and it will be
+  // used to allow the preview/production origin automatically.
+  const corsEnv = process.env.CORS_ORIGINS || process.env.VERCEL_URL || 'http://localhost:5173';
+  const allowedOrigins = corsEnv
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean);
+  server.log.info(`CORS allowed origins: ${JSON.stringify(allowedOrigins)}`);
+
+  await server.register(cors, {
+    origin: (origin: string | undefined, cb: (err: Error | null, allow?: boolean) => void) => {
+      // Allow server-to-server or same-origin requests with no origin header
+      if (!origin) return cb(null, true);
+      if (allowedOrigins.includes('*') || allowedOrigins.includes(origin)) return cb(null, true);
+      server.log.warn(`Blocked CORS origin: ${origin}`);
+      return cb(new Error('Not allowed by CORS'), false);
+    },
+    credentials: true,
+  });
   await server.register(jwt, { secret: process.env.JWT_SECRET || 'dev-secret' });
 
   // Resolve directory for serving a built frontend (if present)
