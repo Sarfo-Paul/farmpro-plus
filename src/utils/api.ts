@@ -12,15 +12,24 @@ async function request(path: string, opts: RequestInit = {}) {
   if (token) headers['Authorization'] = `Bearer ${token}`;
 
   const res = await fetch(`${API_BASE}${path}`, { headers: { ...headers, ...(opts.headers as any) }, ...opts });
-  const txt = await res.text();
-  try {
-    const json = txt ? JSON.parse(txt) : null;
+  const contentType = (res.headers.get('content-type') || '').toLowerCase();
+
+  // If response is JSON, parse normally and surface JSON errors
+  if (contentType.includes('application/json')) {
+    const json = await res.json();
     if (!res.ok) throw json || { message: res.statusText };
     return json;
-  } catch (e) {
-    if (!res.ok) throw e;
-    return null;
   }
+
+  // Non-JSON responses (HTML, text). Read text for debugging and throw on error.
+  const txt = await res.text();
+  if (!res.ok) {
+    const message = txt ? txt : res.statusText;
+    throw { message, status: res.status, body: txt };
+  }
+
+  // Successful non-JSON response (e.g. served SPA). Return null so callers can fall back.
+  return null;
 }
 
 export const api = {
