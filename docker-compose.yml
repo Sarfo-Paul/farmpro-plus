@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  server:
+    build: ./server
+    ports:
+      - '4000:4000'
+    environment:
+      - DATABASE_URL=file:./dev.db
+      - JWT_SECRET=replace_this_secret
+    volumes:
+      - ./server:/app
+    restart: unless-stopped
