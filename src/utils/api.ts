@@ -1,6 +1,6 @@
 import { storage } from './storage';
 
-const API_BASE = (import.meta.env.VITE_API_URL as string) ?? '';
+const API_BASE = (import.meta.env.VITE_API_URL as string) || 'http://localhost:4000';
 
 async function request(path: string, opts: RequestInit = {}) {
   const headers: Record<string, string> = { 'Content-Type': 'application/json' };

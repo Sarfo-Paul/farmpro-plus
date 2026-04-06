@@ -104,7 +104,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <div className="max-w-6xl mx-auto">
           {children}
           <footer className="mt-12 py-6 border-t border-stone-200 text-center text-stone-500 text-sm">
-            <p>Made by Paul Sarfo &bull; 2026</p>
+            <p>Made by Paul Sarfo &bull; FarmTrack Pro &copy; 2026</p>
           </footer>
         </div>
       </main>

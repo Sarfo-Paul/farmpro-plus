@@ -139,18 +139,14 @@ const Auth: React.FC<{ mode: 'login' | 'register' }> = ({ mode }) => {
             </button>
           </form>
 
-          {/* Demo accounts & author credit */}
-          <div className="mt-6 p-4 bg-stone-50 rounded-lg text-sm">
-            <div className="font-bold mb-2">Demo accounts (use for testing)</div>
-            <ul className="text-xs space-y-1">
-              <li><strong>alice@example.com</strong> / Password123!</li>
-              <li><strong>bob@example.com</strong> / Password123!</li>
-              <li><strong>carla@example.com</strong> / Password123!</li>
-              <li><strong>dan@example.com</strong> / Password123!</li>
-              <li><strong>ella@example.com</strong> / Password123!</li>
-              <li><strong>frank@example.com</strong> / Password123!</li>
+          <div className="mt-6 p-4 bg-stone-50 rounded-lg text-sm text-stone-700">
+            <div className="font-bold mb-2">Demo accounts (use for quick login)</div>
+            <ul className="list-disc list-inside text-sm">
+              <li>Alice: alice@example.com / Password123!</li>
+              <li>Bob: bob@example.com / Password123!</li>
+              <li>Carla: carla@example.com / Password123!</li>
             </ul>
-            <div className="mt-3 text-xs text-stone-400">Made by Paul Sarfo — 2026</div>
+            <div className="mt-3 text-xs text-stone-500">Made by Paul Sarfo — 2026</div>
           </div>
 
           <div className="mt-10 pt-10 border-t border-stone-100 flex flex-col items-center gap-6">
